@@ -74,7 +74,7 @@ public class GUI {
                     return;
                 }
 
-                // Check for valid password (add your own validation rules if needed)
+                // Check for valid password
                 if (password.length() < 6) {
                     JOptionPane.showMessageDialog(frame, "Invalid password. Please enter a valid password.");
                     return;
@@ -101,11 +101,23 @@ public class GUI {
                     int totalEmails = client.getEmailCount();
                     int totalPages = (int) Math.ceil((double) totalEmails / emailsPerPage);
 
+                    // Loop through each page of emails
                     for (int i = 1; i <= totalPages; i++) {
+
+                        // Calculate the starting and ending indexes for the emails on the current page
                         int startIndex = (i - 1) * emailsPerPage + 1;
                         int endIndex = Math.min(i * emailsPerPage, totalEmails);
+
+                        // Retrieve a list of emails from a client object using the starting and ending indexes
                         List<Email> emails = client.getEmails(startIndex, endIndex);
+
+                        // Generate an HTML file for the current page using the "generateHome" method in the FileBuilder class
+                        // The method takes in the absolute path for the file, the list of emails, the total number of pages, and the current page number as arguments
                         FileBuilder.generateHome(folder.getAbsolutePath() + "/index_page_" + i + ".html", emails, totalPages, i);
+
+                        // Generate separate HTML files for each email in the list using the "generateFiles" method in the FileBuilder class
+                        // The method takes in the absolute path for the file and the email object as arguments
+                        // The file names are generated using the hash code of the email object, concatenated with the string "mail"
                         for (Email emailObj : emails) {
                             FileBuilder.generateFiles(folder.getAbsolutePath() + "/mail" + emailObj.hashCode() + ".html", emailObj);
                         }

@@ -5,5 +5,3 @@ public class Main {
         SwingUtilities.invokeLater(() -> new GUI());
     }
 }
-//testCONVERTERHTML@outlook.com
-//Testing1212
