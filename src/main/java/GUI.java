@@ -15,9 +15,8 @@ public class GUI {
         createAndShowGUI();
     }
 
-
     private void createAndShowGUI() {
-        JFrame frame = new JFrame("Email to HTML");
+        JFrame frame = new JFrame("HEAS");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
 
@@ -31,7 +30,6 @@ public class GUI {
 
         JTextField emailField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
-        JTextField outputFolderField = new JTextField();
         JTextField emailsPerPageField = new JTextField();
 
         container.add(new JLabel("Email:"));
@@ -39,13 +37,13 @@ public class GUI {
         container.add(new JLabel("Password:"));
         container.add(passwordField);
         container.add(new JLabel("Output Folder:"));
-        container.add(outputFolderField);
+
+        JButton outputFolderButton = new JButton("...");
+        container.add(outputFolderButton);
         container.add(new JLabel("Emails per Page:"));
         container.add(emailsPerPageField);
 
-        JButton browseButton = new JButton("Browse");
-        container.add(browseButton);
-        browseButton.addActionListener(new ActionListener() {
+        outputFolderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -53,22 +51,23 @@ public class GUI {
                 int returnValue = fileChooser.showOpenDialog(frame);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedFolder = fileChooser.getSelectedFile();
-                    outputFolderField.setText(selectedFolder.getAbsolutePath());
+                    outputFolderButton.setText(selectedFolder.getAbsolutePath());
                 }
             }
         });
 
         JButton submitButton = new JButton("Submit");
+        container.add(new JLabel("Submit:"));
         container.add(submitButton);
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
-                String outputFolder = outputFolderField.getText();
+                String outputFolder = outputFolderButton.getText();
                 int emailsPerPage;
 
-                // Check for valid email address
+                // Check for valid email address - look into libraries for more comprehensive validations
                 if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
                     JOptionPane.showMessageDialog(frame, "Invalid email address. Please enter a valid email address.");
                     return;
@@ -129,7 +128,7 @@ public class GUI {
                     // Clear the entry fields
                     emailField.setText("");
                     passwordField.setText("");
-                    outputFolderField.setText("");
+                    outputFolderButton.setText("...");
                     emailsPerPageField.setText("");
 
                 } catch (IOException | MessagingException ex) {
@@ -137,8 +136,6 @@ public class GUI {
                     JOptionPane.showMessageDialog(frame, "Invalid email address or password. Please check your credentials and try again.");
                 }
             }
-
-
         });
         frame.setVisible(true);
     }
